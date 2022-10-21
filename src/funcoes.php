@@ -2,6 +2,7 @@
 
 namespace SRC;
 
+
 class Funcoes
 {
     /*
@@ -14,19 +15,27 @@ class Funcoes
 	Ano 1700 = século 17
 
      * */
-    public function SeculoAno(int $ano): int {
-        
+    public function SeculoAno(int $ano): int
+    {
+        $algarismo = '';
+        if (mb_strlen($ano) < 4) {
+            $algarismo = substr($ano, 0, 1);
+        } else {
+            $algarismo =  substr($ano, 0, 2);
+        }
+        $century = $algarismo + 1;
+        return $century;
     }
 
-    
-	
-	
-	
-	
-	
-	
-	
-	/*
+
+
+
+
+
+
+
+
+    /*
 
     Desenvolva uma função que receba como parâmetro um número inteiro e retorne o numero primo imediatamente anterior ao número recebido
 
@@ -36,8 +45,22 @@ class Funcoes
     Número = 29 resposta = 23
 
      * */
-    public function PrimoAnterior(int $numero): int {
-        
+    public function PrimoAnterior(int $numero): int
+    {
+        $numberInt = $numero - 1;
+        $i = 1;
+        for ($numberInt; $numberInt > 2; $numberInt--) {
+            $divisores = 0;
+            for ($i = 2; $i < $numberInt; $i++) {
+                if ($numberInt % $i == 0) {
+                    $divisores += 1;
+                }
+            }
+
+            if ($divisores == 0 && $numberInt != 0 && $numberInt != 1) {
+                return $numberInt;
+            }
+        }
     }
 
 
@@ -65,16 +88,22 @@ class Funcoes
 	resposta = 25
 
      * */
-    public function SegundoMaior(array $arr): int {
-        
+    public function SegundoMaior(array $arr): int
+    {
+        $cont = [];
+        foreach ($arr as  $item) {
+            array_push($cont, array_sum($item));
+        }
+        sort($cont);
+        return $cont[1];
     }
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 
     /*
    Desenvolva uma função que receba como parâmetro um array de números inteiros e responda com TRUE or FALSE se é possível obter uma sequencia crescente removendo apenas um elemento do array.
@@ -105,8 +134,114 @@ class Funcoes
     [3, 5, 67, 98, 3] true
 
      * */
-    
-	public function SequenciaCrescente(array $arr): boolean {
-        
+
+    public function SequenciaCrescente(array $arr): string
+    {
+        sort($arr);
+        if (count($arr) == 1) {
+            return true;
+        } else {
+            $result =  array_unique(array_diff_assoc($arr, array_unique($arr)));
+            if (count($result) > 1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------------------------------
+// ------------------------FUNÇÕES--------------------------------------
+function Century($ano)
+{
+    $obj =  new Funcoes();
+    $century = $obj->SeculoAno($ano);
+    return "Ano " . $ano . " = Século " . $century . ".";
+}
+
+
+function PrimeNumber($numberInt)
+{
+    $result = Funcoes::PrimoAnterior($numberInt);
+    return 'Numero = ' . $numberInt . ' resposta = ' . $result;
+}
+
+
+function SecondLargest($colletion)
+{
+    $result = Funcoes::SegundoMaior($colletion);
+    return 'Resposta = ' . $result;
+}
+
+function IncresingSequential($colletion)
+{
+    if (Funcoes::SequenciaCrescente($colletion) == true) {
+        return 'true';
+    } else {
+        return 'false';
+    }
+}
+// --------------------------------------------------------------------
+// ------------------------FIM FUNÇÕES--------------------------------------
+
+
+
+
+
+
+
+
+
+
+// -----------------------------------------------------
+echo ('<h1>1º função</h1>');
+echo (Century(932));
+echo ('<hr>');
+
+
+
+
+
+
+// -----------------------------------------------------
+echo ('<h1>2º função</h1>');
+echo (PrimeNumber(41));
+echo ('<hr>');
+
+
+
+
+
+
+
+
+// -----------------------------------------------------
+echo ('<h1>3º função</h1>');
+$colletion = array(
+    array(25, 22, 18),
+    array(10, 15, 13),
+    array(24, 5, 2),
+    array(80, 17, 15)
+);
+echo (SecondLargest($colletion));
+echo ('<hr>');
+
+
+
+
+
+// -----------------------------------------------------
+echo ('<h1>4º função</h1>');
+$colletion = [1, 2, 1, 2];
+echo (IncresingSequential($colletion));
+echo ('<hr>');
